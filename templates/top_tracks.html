@@ -1,0 +1,103 @@
+<!doctype html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Top Tracks</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .bg {
+            background-image: url("/static/background.jpg");
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .myDiv {
+            border: 3px solid #f1f1f1;
+            background-color: rgb(0,0,0);
+            background-color: rgb(0,0,0,0.65);
+            color: white;
+            position: absolute;
+            top: 150px;
+            left: 50%;
+            transform: translate(-50%, 0%);
+            width: 30%;
+            padding: 20 px;
+            text-align: left;
+        }
+        .topnav {
+            background-color: #333;
+            overflow: hidden;
+            top: 0;
+        }
+        .topnav a {
+            float: right;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 6px 16px;
+            margin: 25px 0px 25px 0px;
+            text-decoration: none;
+            font-size: 25px;
+        }
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .topnav p {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 6px 16px;
+            font-size: 25px;
+        }
+        input[type=radio], input[type=number] {
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+        input[type=submit] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .container {
+            padding: 0px 0px 20px 20px;
+        }
+        @media only screen and (max-width: 1450px) {
+            .myDiv {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topnav">
+        <p>Stats for Spotify</p>
+        <a href="/">Home</a>
+    </div>
+    <div class="myDiv">
+        <h1 style="padding-left: 20px;">Your Top Tracks</h1>
+        <div class="container">
+            <form action="/top_tracks/results" method="get">
+                <label style="font-weight: bold;">Time Range:</label><br>
+                <input type="radio" id="short" name="time" value="short_term">
+                <label for="short">Last 4 Weeks</label><br>
+                <input type="radio" id="medium" name="time" value="medium_term">
+                <label for="short">Last 6 Months</label><br>
+                <input type="radio" id="long" name="time" value="long_term">
+                <label for="short">All-Time</label><br><br>
+                <label for="limit" style="font-weight: bold;">Tracks to Display (1 - 50):</label><br>
+                <input type="number" id="limit" name="limit" min="1" max="50"><br>
+                <input type="submit" value="Go!">
+            </form>
+        </div>
+    </div>
+    <div class="bg"></div>
+</body>
