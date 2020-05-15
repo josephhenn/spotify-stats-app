@@ -27,6 +27,10 @@
             padding: 20 px;
             text-align: left;
         }
+        .myDiv a {
+            color: white;
+            text-decoration: none;
+        }
         .topnav {
             background-color: #333;
             overflow: hidden;
@@ -66,9 +70,10 @@
     </div>
     <div class="myDiv">
         <h1 style="padding-left: 20px;">Your Top Tracks</h1>
+        <h4 style="padding-left: 20px;">Click a track to open in Spotify</h4>
         <ol id="tracks">
             {% for item in tracks %}
-            <li style="padding: 2px 0px"><b>{{ item[0] }}</b> - {{ item[1] }}</li>
+            <li style="padding: 2px 0px"><a href="{{ item[2] }}" target="_blank"><b>{{ item[0] }}</b> - {{ item[1] }}</a></li>
             {% endfor %}
         </ol>
     </div>

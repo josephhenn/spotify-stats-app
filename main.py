@@ -97,7 +97,8 @@ def top_tracks_results():
             artists = [artist['name'] for artist in track['artists']]
             artists = ', '.join(artists)
             name = track['name']
-            tracks.append([name, artists])
+            open_url = track['external_urls']['spotify']
+            tracks.append([name, artists, open_url])
         # tracks = [track['name'] for track in resp.json()['items']]
         return render_template('top_tracks_results.html', tracks=tracks)
     except:
