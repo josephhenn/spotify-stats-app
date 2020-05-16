@@ -2,7 +2,10 @@ from flask import Flask, render_template, redirect, request, make_response
 from urllib.parse import urlencode
 from secret import client_id, client_secret
 import requests
+from flask_mobility import Mobility
 app = Flask(__name__)
+Mobility(app)
+
 # REDIRECT_URI = "http://127.0.0.1:5000/authorize"
 REDIRECT_URI = "https://stats-for-spotify.uc.r.appspot.com/authorize"
 
@@ -71,8 +74,6 @@ def top_artists():
 def top_tracks_results():
     try:
         access_token = request.cookies.get('access_token')
-        refresh_token = request.cookies.get('refresh_token')
-        # access_token, refresh_token = get_tokens(refresh_token)
         limit = request.args.get('limit')
         if limit:
             limit = limit
@@ -99,18 +100,18 @@ def top_tracks_results():
             name = track['name']
             open_url = track['external_urls']['spotify']
             tracks.append([name, artists, open_url])
-        # tracks = [track['name'] for track in resp.json()['items']]
         return render_template('top_tracks_results.html', tracks=tracks)
     except:
-        return redirect('/')
+        resp = make_response(redirect('/'))
+        resp.delete_cookie('access_token')
+        resp.delete_cookie('refresh_token')
+        return resp
 
 
 @app.route('/top_artists/results')
 def top_artists_results():
     try:
         access_token = request.cookies.get('access_token')
-        refresh_token = request.cookies.get('refresh_token')
-        # access_token, refresh_token = get_tokens(refresh_token)
         limit = request.args.get('limit')
         if limit:
             limit = limit
@@ -133,7 +134,10 @@ def top_artists_results():
         artists = [artist['name'] for artist in resp.json()['items']]
         return render_template('top_artists_results.html', artists=artists)
     except:
-        return redirect('/')
+        resp = make_response(redirect('/'))
+        resp.delete_cookie('access_token')
+        resp.delete_cookie('refresh_token')
+        return resp
 
 
 @app.route('/error')
