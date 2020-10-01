@@ -140,6 +140,56 @@ def top_artists_results():
         return resp
 
 
+@app.route('/recommended')
+def recommended():
+    return render_template('recommended.html')
+
+
+@app.route('/recommended/results')
+def recommended_results():
+    try:
+        access_token = request.cookies.get('access_token')
+        time_range = request.args.get('time')
+        seed = request.args.get('seed')
+        if seed == 'artists':
+            url = 'https://api.spotify.com/v1/me/top/artists'
+        elif seed == 'tracks':
+            url = 'https://api.spotify.com/v1/me/top/tracks'
+        head = {
+            'Authorization': 'Bearer ' + access_token
+        }
+        params = {
+            'limit': '5',
+            'time_range': time_range
+        }
+        resp = requests.get(url, headers=head, params=params)
+        seeds = [seed['id'] for seed in resp.json()['items']]
+        seeds = ','.join(seeds)
+        url = 'https://api.spotify.com/v1/recommendations'
+        if seed == 'artists':
+            params = {
+                'seed_artists': seeds
+            }
+        elif seed == 'tracks':
+            params = {
+                'seed_tracks': seeds
+            }
+        resp = requests.get(url, headers=head, params=params)
+        tracks = []
+        for track in resp.json()['tracks']:
+            artists = [artist['name'] for artist in track['artists']]
+            artists = ', '.join(artists)
+            name = track['name']
+            open_url = track['external_urls']['spotify']
+            tracks.append([name, artists, open_url])
+        return render_template('recommended_results.html', tracks=tracks)
+    except:
+        resp = make_response(redirect('/'))
+        resp.delete_cookie('access_token')
+        resp.delete_cookie('refresh_token')
+        return resp
+
+
 @app.route('/error')
 def error():
     return render_template('error.html')
